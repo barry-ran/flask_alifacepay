@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ko" lang="ko">
+<head>
+<title>支付宝当面付</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no" />
+<script type="text/javascript" src="{{url_for('static',filename='qrcode.js')}}"></script>
+</head>
+<body>
+
+<div align="center">
+  <h1>请使用支付宝扫码付款</h1>
+  <p>订单编号: {{ out_trade_no }}</p>
+  <div id="qrcode"></div>
+</div>
+
+<script type="text/javascript">
+var qrcode = new QRCode('qrcode', {
+  text: "{{ qrcode_url }}",
+  width: 256,
+  height: 256,
+  colorDark : '#FF0000',
+  colorLight : '#ffffff',
+  correctLevel : QRCode.CorrectLevel.H
+});
+
+function waitPay() {
+    var rq = new XMLHttpRequest();
+    var out_trade_no = "{{ out_trade_no }}"
+    // 默认异步请求
+    rq.open('GET', "/wait_pay?out_trade_no=" + out_trade_no);
+    //rq.open('GET', "/wait_pay?out_trade_no=" + trade_no);
+    rq.send()
+    // 这个请求服务端阻塞直到支付成功才会触发
+    rq.onload = function() {
+        // 跳转支付成功界面
+        window.location.href = "/pay_success"
+    }
+}
+// 立即执行
+waitPay()
+
+</script>
+</body>

@@ -1,0 +1,3 @@
+[submodule "alifacepay"]
+	path = alifacepay
+	url = git@github.com:barry-ran/alifacepay.git
